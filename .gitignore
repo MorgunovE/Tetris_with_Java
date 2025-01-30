@@ -1,0 +1,16 @@
+# course config files
+*.yaml
+
+# gradle
+.gradle/
+build
+
+
+# idea config
+.idea
+
+# old stages
+/Tetris with Java/*
+!/Tetris with Java/task/
+/Tetris with Java/task/*
+!/Tetris with Java/task/src

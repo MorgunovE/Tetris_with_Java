@@ -1,0 +1,848 @@
+<------ project plan: Tetris with Java: Work on project. Stage 3/4: Let the Pieces Hit the Floor ---------->
+1.	Write code for an application “Tetris with Java”, use class Main for start point of this application, you need to write in MVC architecture pattern and you need to respect SOLID principles, you can create some additional files and classes for this application and some packages for them;
+2.	the description, logic and examples (you need to write or update this application with the same output) for this stage of this application (
+Description
+Now, once the pieces have been transferred and the player can move them across the board, we need to implement the borders to restrict the movement of pieces. In the previous stage, it was like that:
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - 0 0
+- - - - - - - - 0 0
+- - - - - - - - - -
+- - - - - - - - - -
+The O piece above moves through the left board's wall and emerges from the right as shown in the figure below.
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+0 - - - - - - - - 0
+0 - - - - - - - - 0
+- - - - - - - - - -
+- - - - - - - - - -
+Let's add a rule to restrict that. Create the borders so that the piece cannot move through the imaginary walls. And don't forget about the "floor". Your pieces should not fall through it. Once the piece hits the floor, it should be stored on the game board and remain static.
+Objectives
+In this stage, your program should:
+1.	Restrict the piece movement on the game board.
+2.	Rotate the pieces as they move.
+3.	Make the piece static once it hits the floor of the game board.
+Remember, your board can be of any size you want.
+Examples
+The example below shows how your program should work.
+The greater-than symbol followed by a space (> ) represents the user input. Note that it's not part of the input.
+Example 1: typing "O" (piece) and "10 10" (dimensions of the grid)
+> O
+> 10 10
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+- - - - 0 0 - - - -
+- - - - 0 0 - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - 0 0 - - - - -
+- - - 0 0 - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - 0 0 - - - - - -
+- - 0 0 - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- 0 0 - - - - - - -
+- 0 0 - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+0 0 - - - - - - - -
+0 0 - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+0 0 - - - - - - - -
+0 0 - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+0 0 - - - - - - - -
+0 0 - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> right
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- 0 0 - - - - - - -
+- 0 0 - - - - - - -
+- - - - - - - - - -
+
+> right
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - 0 0 - - - - - -
+- - 0 0 - - - - - -
+
+> down
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - 0 0 - - - - - -
+- - 0 0 - - - - - -
+
+
+> right
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - 0 0 - - - - - -
+- - 0 0 - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - 0 0 - - - - - -
+- - 0 0 - - - - - -
+
+> exit
+Example 2: typing "L" (piece) and "10 10" (dimensions of the grid)
+> L
+> 10 10
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+- - - - 0 - - - - -
+- - - - 0 - - - - -
+- - - - 0 0 - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> rotate
+- - - - - - - - - -
+- - - - - 0 - - - -
+- - - 0 0 0 - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> rotate
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - 0 0 - - - -
+- - - - - 0 - - - -
+- - - - - 0 - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - 0 0 - - - - -
+- - - - 0 - - - - -
+- - - - 0 - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - 0 0 - - - - - -
+- - - 0 - - - - - -
+- - - 0 - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- 0 0 - - - - - - -
+- - 0 - - - - - - -
+- - 0 - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+0 0 - - - - - - - -
+- 0 - - - - - - - -
+- 0 - - - - - - - -
+- - - - - - - - - -
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+0 0 - - - - - - - -
+- 0 - - - - - - - -
+- 0 - - - - - - - -
+
+> right
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+0 0 - - - - - - - -
+- 0 - - - - - - - -
+- 0 - - - - - - - -
+
+> down
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+0 0 - - - - - - - -
+- 0 - - - - - - - -
+- 0 - - - - - - - -
+
+
+> left
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+- - - - - - - - - -
+0 0 - - - - - - - -
+- 0 - - - - - - - -
+- 0 - - - - - - - -
+
+> exit
+);
+3.	classes this application, you can change them for logic implementation or for test passing (
+a.	Tetris with Java/task/src/tetris/Main.java -> code of this class (
+package tetris;
+
+import tetris.controller.GameController;
+import tetris.view.GameView;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String pieceName = scanner.nextLine().trim();
+        String[] dims = scanner.nextLine().trim().split(" ");
+        int width = Integer.parseInt(dims[0]);
+        int height = Integer.parseInt(dims[1]);
+
+        GameController controller = new GameController(width, height);
+        controller.initialize(pieceName);
+
+        GameView view = new GameView();
+        view.printGrids(controller.getGrids());
+
+        while (true) {
+            String command = scanner.nextLine().trim();
+            if ("exit".equals(command)) {
+                break;
+            }
+            controller.processCommand(command);
+            view.printCurrentGrid(controller.getGrids());
+        }
+        scanner.close();
+    }
+}
+);
+b.	Tetris with Java/task/src/tetris/controller/GameController.java -> code of this class (
+package tetris.controller;
+
+import tetris.model.Grid;
+import tetris.model.Piece;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class GameController {
+    private final int width;
+    private final int height;
+    private final List<Grid> grids = new ArrayList<>();
+    private List<Integer[]> rotations;
+    private int rotationIndex = 0;
+    private Integer[] currentPositions;
+
+    public GameController(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public void initialize(String pieceName) {
+        // 1) Add empty board
+        grids.add(createBoard(new Integer[]{}));
+
+        // 2) Set up piece
+        Piece piece = getPieceByName(pieceName);
+        if (piece != null && !piece.getRotations().isEmpty()) {
+            rotations = piece.getRotations();
+            rotationIndex = 0;
+            currentPositions = rotations.get(rotationIndex);
+            // 3) Add board with piece
+            grids.add(createBoard(currentPositions));
+        }
+    }
+
+    public void processCommand(String command) {
+        switch (command) {
+            case "left" -> move(-1);
+            case "right" -> move(1);
+            case "down" -> move(width);
+            case "rotate" -> rotate();
+            default -> {}
+        }
+    }
+
+    private void move(int delta) {
+        if (currentPositions == null) return;
+        Integer[] newPos = new Integer[currentPositions.length];
+        for (int i = 0; i < currentPositions.length; i++) {
+            newPos[i] = currentPositions[i] + delta;
+        }
+        currentPositions = newPos;
+        grids.add(createBoard(currentPositions));
+    }
+
+    private void rotate() {
+        if (rotations == null || rotations.isEmpty()) return;
+        rotationIndex = (rotationIndex + 1) % rotations.size();
+        currentPositions = rotations.get(rotationIndex);
+        grids.add(createBoard(currentPositions));
+    }
+
+    public List<Grid> getGrids() {
+        return grids;
+    }
+
+    private Grid createBoard(Integer[] positions) {
+        Grid board = new Grid(height, width);
+        for (int pos : positions) {
+            int r = pos / width;
+            int c = pos % width;
+            if (r >= 0 && r < height && c >= 0 && c < width) {
+                board.setCell(r, c, "0");
+            }
+        }
+        return board;
+    }
+
+    private Piece getPieceByName(String name) {
+        return switch (name) {
+            case "O" -> new Piece("O", new Integer[][]{
+                    {4, 14, 15, 5}
+            });
+            case "I" -> new Piece("I", new Integer[][]{
+                    {4, 14, 24, 34}, {3, 4, 5, 6}
+            });
+            case "S" -> new Piece("S", new Integer[][]{
+                    {5, 4, 14, 13}, {4, 14, 15, 25}
+            });
+            case "Z" -> new Piece("Z", new Integer[][]{
+                    {4, 5, 15, 16}, {5, 15, 14, 24}
+            });
+            case "L" -> new Piece("L", new Integer[][]{
+                    {4, 14, 24, 25},
+                    {5, 15, 14, 13},
+                    {4, 5, 15, 25},
+                    {6, 5, 4, 14}
+            });
+            case "J" -> new Piece("J", new Integer[][]{
+                    {5, 15, 25, 24},
+                    {15, 5, 4, 3},
+                    {5, 4, 14, 24},
+                    {4, 14, 15, 16}
+            });
+            case "T" -> new Piece("T", new Integer[][]{
+                    {4, 14, 24, 15},
+                    {4, 13, 14, 15},
+                    {5, 15, 25, 14},
+                    {4, 5, 6, 15}
+            });
+            default -> null;
+        };
+    }
+}
+);
+c.	Tetris with Java/task/src/tetris/model/Grid.java -> code of this class (
+package tetris.model;
+
+public class Grid {
+    private final String[][] matrix;
+
+    public Grid(int rows, int cols) {
+        matrix = new String[rows][cols];
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                matrix[r][c] = "-";
+            }
+        }
+    }
+
+    public void setCell(int row, int col, String value) {
+        matrix[row][col] = value;
+    }
+
+    public String[][] getMatrix() {
+        return matrix;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (String[] row : matrix) {
+            for (String cell : row) {
+                sb.append(cell).append(" ");
+            }
+            sb.append("\n");
+        }
+        return sb.toString().trim();
+    }
+}
+);
+d.	Tetris with Java/task/src/tetris/model/Piece.java -> code of this class (
+package tetris.model;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class Piece {
+    private final String name;
+    private final Integer[][] rotations;
+
+    public Piece(String name, Integer[][] rotations) {
+        this.name = name;
+        this.rotations = rotations;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Integer[]> getRotations() {
+        return new ArrayList<>(Arrays.asList(rotations));
+    }
+}
+);
+e.	Tetris with Java/task/src/tetris/view/GameView.java -> code of this class (
+package tetris.view;
+
+import tetris.model.Grid;
+import java.util.List;
+
+public class GameView {
+    public void printGrids(List<Grid> grids) {
+        for (int i = 0; i < grids.size(); i++) {
+            System.out.println(grids.get(i));
+                System.out.println();
+        }
+    }
+
+    public void printCurrentGrid(List<Grid> grids) {
+        if (!grids.isEmpty()) {
+            System.out.println(grids.get(grids.size() - 1));
+            System.out.println();
+        }
+    }
+}
+);
+);
+4.	test classes for this application, you can't change this test classes, you need to pass this test in this application classes, you can to use this test classes for reference and code example of functions for this application, you can create some classes for this application taking some part of code from test classes (
+a.	 TetrisTest.java -> code of this class (
+import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.TestCase;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class TetrisTest extends StageTest<String> {
+
+    @Override
+    public List<TestCase<String>> generate() {
+        return List.of(
+                new TestCase<String>().setInput("O\n10 10\nleft\nleft\nleft\nleft\nleft\nleft\nright\nright\ndown\nright\nleft\nexit")
+                        .setAttach("- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - 0 0 - - - -\n- - - - 0 0 - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - 0 0 - - - - -\n- - - 0 0 - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - 0 0 - - - - - -\n- - 0 0 - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- 0 0 - - - - - - -\n- 0 0 - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n0 0 - - - - - - - -\n" +
+                                "0 0 - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "0 0 - - - - - - - -\n0 0 - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n0 0 - - - - - - - -\n0 0 - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- 0 0 - - - - - - -\n- 0 0 - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - 0 0 - - - - - -\n- - 0 0 - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - 0 0 - - - - - -\n- - 0 0 - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - 0 0 - - - - - -\n- - 0 0 - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - 0 0 - - - - - -\n- - 0 0 - - - - - -\n\n"),
+                new TestCase<String>().setInput("L\n10 10\nrotate\nrotate\nleft\nleft\nleft\nleft\nleft\nright\ndown\nleft\nexit")
+                        .setAttach("- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - 0 - - - - -\n- - - - 0 - - - - -\n- - - - 0 0 - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - 0 - - - -\n- - - 0 0 0 - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - 0 0 - - - -\n- - - - - 0 - - - -\n- - - - - 0 - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - 0 0 - - - - -\n- - - - 0 - - - - -\n" +
+                                "- - - - 0 - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - 0 0 - - - - - -\n" +
+                                "- - - 0 - - - - - -\n- - - 0 - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- 0 0 - - - - - - -\n- - 0 - - - - - - -\n- - 0 - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n0 0 - - - - - - - -\n- 0 - - - - - - - -\n- 0 - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n0 0 - - - - - - - -\n- 0 - - - - - - - -\n- 0 - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n0 0 - - - - - - - -\n- 0 - - - - - - - -\n- 0 - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n0 0 - - - - - - - -\n- 0 - - - - - - - -\n- 0 - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n0 0 - - - - - - - -\n- 0 - - - - - - - -\n- 0 - - - - - - - -\n\n"),
+                new TestCase<String>().setInput("T\n10 10\nrotate\nright\nright\nright\nright\nright\nright\nright\nrotate\nexit")
+                        .setAttach("- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - 0 - - - - -\n- - - - 0 0 - - - -\n- - - - 0 - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - 0 - - - - -\n- - - 0 0 0 - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - 0 - - - -\n- - - - 0 0 0 - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - 0 - - -\n- - - - - 0 0 0 - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - 0 - -\n" +
+                                "- - - - - - 0 0 0 -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - 0 -\n- - - - - - - 0 0 0\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - 0 -\n- - - - - - - 0 0 0\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - 0 -\n- - - - - - - 0 0 0\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - 0 -\n- - - - - - - 0 0 0\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - 0 -\n- - - - - - - 0 0 0\n\n"),
+                new TestCase<String>().setInput("T\n10 5\nrotate\ndown\ndown\ndown\ndown\nexit")
+                        .setAttach("- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - 0 - - - - -\n- - - - 0 0 - - - -\n- - - - 0 - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - 0 - - - - -\n- - - 0 0 0 - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - 0 - - - - -\n- - - 0 0 0 - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - 0 - - - - -\n- - - 0 0 0 - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - 0 - - - - -\n- - - 0 0 0 - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - 0 - - - - -\n- - - 0 0 0 - - - -\n\n"),
+                new TestCase<String>().setInput("J\n10 6\nrotate\nrotate\nrotate\nexit")
+                        .setAttach("- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - 0 - - - -\n- - - - - 0 - - - -\n- - - - 0 0 - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - 0 0 0 - - - -\n- - - - - 0 - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - 0 0 - - - -\n- - - - 0 - - - - -\n- - - - 0 - - - - -\n- - - - - - - - - -\n\n" +
+                                "- - - - - - - - - -\n- - - - - - - - - -\n- - - - - - - - - -\n- - - - 0 - - - - -\n- - - - 0 0 0 - - -\n- - - - - - - - - -\n\n")
+        );
+    }
+
+
+    @Override
+    public CheckResult check(String output, String expected) {
+        String[] board = expected.trim().split("\n\n");
+        String[] reply_board = output.trim().split("\n\n");
+        if (board.length != reply_board.length) {
+            String message = "A field with " + board.length + " grid" + (board.length != 1 ? "s" : "") + " is expected to be printed. ";
+            if (reply_board.length == 1 && reply_board[0].isEmpty()) {
+                return CheckResult.wrong(message + "The output is empty.");
+            }
+
+            message += "Found " + reply_board.length + " grid" + (reply_board.length != 1 ? "s." : ".");
+            return CheckResult.wrong(message);
+
+        }
+        List<String[]> line = Arrays.stream(board).map(
+                it -> it.trim().split("\n")
+        ).toList();
+        List<String[]> line_reply = Arrays.stream(reply_board).map(
+                it -> it.trim().split("\n")
+        ).toList();
+
+        if (line.size() != line_reply.size()) {
+            return CheckResult.wrong(
+                    "A grid with " + line.size() + " rows is expected to be printed. Found " + line_reply.size() + " rows");
+        }
+
+        for (int i = 0; i < line.size(); ++i) {
+            List<String[]> line_columns = Arrays.stream(line.get(i)).map(
+                    it -> it.trim().split(" ")
+            ).toList();
+            List<String[]> reply_columns = Arrays.stream(line_reply.get(i)).map(
+                    it -> it.trim().split(" ")
+            ).toList();
+
+            if (line_columns.size() != reply_columns.size()) {
+                return CheckResult.wrong(
+                        "A grid with " + line_columns.size() + " columns is expected to be printed. Found " + reply_columns.size() + " columns");
+            }
+
+            for (String[] one_col : reply_columns) {
+                for (String symbol : one_col) {
+                    if (!"-".equals(symbol) && !"0".equals(symbol)) {
+                        return CheckResult.wrong("The field should contain zero (0) or short-dash (-) symbols. Found " + symbol);
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < reply_board.length; ++i) {
+            String[] reply_board_per_line = reply_board[i].split("\n");
+            String[] answer_board_per_line = board[i].split("\n");
+
+            for (int j = 0; j < reply_board_per_line.length; ++j) {
+                if (j >= answer_board_per_line.length) {
+                    return CheckResult.wrong("Seems like the size of the grid is incorrect");
+                }
+                if (!reply_board_per_line[j].trim().equals(answer_board_per_line[j].trim())) {
+                    return CheckResult.wrong(
+                            "Wrong line " + (j + 1) + " in grid " + (i + 1) + ": Should be " + answer_board_per_line[j] + " instead of " + reply_board_per_line[j] + "\nExpected grid:\n" + board[i] + "\nYour grid:\n" + reply_board[i]);
+                }
+            }
+        }
+
+        return CheckResult.correct();
+    }
+
+}
+);
+);
+5.	use this name of topic for java for write this application, because this application needs to be written with relevant of this topic (
+a.	Introduction to Java
+b.	Basic literals: numbers, strings and characters
+c.	Writing first program
+d.	Printing data
+e.	Types and variables
+f.	Comments
+g.	Reading user's input with Scanner
+h.	Coding style conventions
+i.	Naming variables
+j.	Arithmetic operations
+k.	Integer types and operations
+l.	Increment and decrement
+m.	Data types and their sizes
+n.	Type casting
+o.	Calling methods
+p.	Floating-point types
+q.	Boolean type and operations. True and false
+r.	Comparing values. Relational operators
+s.	Conditional statement
+t.	One-line condition with ternary operator
+u.	While and do-while loops
+v.	For loop
+w.	Break and continue. Branching
+x.	Declaring methods
+y.	Method "main"
+z.	Multiple conditions: switch
+aa.	Functional decomposition
+bb.	Overloading
+cc.	Primitive and reference types
+dd.	Array
+ee.	Arrays as parameters
+ff.	Iterating over arrays
+gg.	Characters
+hh.	String
+ii.	Constants. Final variables
+jj.	Write, compile, and run
+kk.	Defining classes
+ll.	Grouping classes with packages
+mm.	Instance methods
+nn.	Initializing new instances. Constructor
+oo.	Access modifiers
+pp.	Getters and setters
+qq.	Inheritance
+rr.	Protected modifier
+ss.	Referencing subclass objects
+tt.	Multiple constructors
+uu.	Keyword "super"
+vv.	Object class
+ww.	Objects and their properties
+xx.	Static members
+yy.	Adding annotations
+zz.	Method overriding
+aaa.	Polymorphism
+bbb.	Declaring functionality with interfaces
+ccc.	Random class
+ddd.	Errors in programs
+eee.	First glance at exceptions
+fff.	Hierarchy of exceptions
+ggg.	NullPointerException
+hhh.	Throwing exceptions
+iii.	IDE
+jjj.	What is object-oriented programming
+kkk.	Immutability
+lll.	Wrapping classes. Boxing
+mmm.	Introduction to generic programming
+nnn.	Generics and Object
+ooo.	Data structures
+ppp.	Abstract and concrete data structures
+qqq.	What are collections
+rrr.	The Collections framework overview
+sss.	Fixed-size array
+ttt.	Dynamic array
+uuu.	ArrayList
+vvv.	The List interface
+www.	Multidimensional array
+xxx.	Formatted output
+yyy.	Processing strings
+zzz.	IntelliJ IDEA
+aaaa.	IntelliJ IDEA basics
+bbbb.	StringBuilder
+cccc.	Stack
+dddd.	The Set interface
+eeee.	Hashing: overview
+ffff.	Modulo division
+gggg.	Hash function
+hhhh.	Hash table
+iiii.	The Map interface
+jjjj.	Queue
+kkkk.	Deque
+llll.	Stack
+mmmm.	Queue
+nnnn.	JetBrains Academy plugin
+oooo.	Lambda expressions
+pppp.	What are bugs
+qqqq.	Introduction to logging
+rrrr.	Debugging techniques
+) ;
+
